@@ -97,6 +97,6 @@ Settings and account settings are added. The settings screen displays the user�
  
 Finally, the habit creation and habit editing features enables a user to add and edit habits. Habit deletion is also displayed within the edit habit feature. The new habit feature prompts the user to enter habit name, a description of the habit, and habit frequency. The habit editing feature allows the user to change habit details such as name, description, and frequency. For adding a new habit, the user simply selects add habit. To update a habit’s information, the user can select save or cancel if they do not want to change the habit’s information. If a user decides to delete a habit, they can select the delete button which will display a warning message. The warning message will alert the user if they want to delete the habit. The users select the delete button to remove a habit.
 
-References:
+**References:**
 
 Figma. (2025). Figma: The collaborative interface design tool. Figma. https://www.figma.com/
