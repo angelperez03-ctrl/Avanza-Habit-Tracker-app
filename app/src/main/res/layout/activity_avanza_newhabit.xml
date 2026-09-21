@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background">
+
+    <!-- White form/card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/newHabitCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="24dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="24dp">
+
+            <!-- Drag handle -->
+            <View
+                android:id="@+id/drag_handle"
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/drag_handle_shape"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- New habit title -->
+            <TextView
+                android:id="@+id/newHabitTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/new_habit"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/drag_handle"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/habitNameLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/habit_name"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/newHabitTitle"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <!-- New habit text input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/habitNameInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundColor="#D9D9D9"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:hintEnabled="false"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintTop_toBottomOf="@id/habitNameLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/habitNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:hint="@string/e_g_journal_daily"
+                    android:inputType="textCapSentences"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#777777"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/habitDescriptionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/habit_description"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/habitNameInputLayout"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <!-- New habit Description input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/habitDescriptionInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundColor="#D9D9D9"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:hintEnabled="false"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:layout_constraintTop_toBottomOf="@id/habitDescriptionLabel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/habitDescriptionInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:hint="@string/what_does_this_habit_involve"
+                    android:inputType="textCapSentences"
+                    android:maxLines="1"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#777777"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Frequency label -->
+            <TextView
+                android:id="@+id/frequencyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/frequency"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/habitDescriptionInputLayout"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Daily Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dailyCard"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:text="Daily&#10;Every day"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:gravity="start|center_vertical"
+                android:paddingStart="14dp"
+                app:backgroundTint="@color/avanza_light_grey"
+                app:cornerRadius="12dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintTop_toBottomOf="@id/frequencyLabel"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <!-- Weekdays Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/weekDaysCard"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:text="Weekdays&#10;Mon - Fri"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:gravity="start|center_vertical"
+                android:paddingStart="14dp"
+                app:backgroundTint="@color/avanza_light_grey"
+                app:cornerRadius="12dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintTop_toBottomOf="@id/frequencyLabel"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+            <!-- Weekends Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/weekendsCard"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:text="Weekends&#10;Sat - Sun"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:gravity="start|center_vertical"
+                android:paddingStart="14dp"
+                app:backgroundTint="@color/avanza_light_grey"
+                app:cornerRadius="12dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintTop_toBottomOf="@id/dailyCard"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <!-- Weekly Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/weeklyCard"
+                android:layout_width="130dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:text="Weekly&#10;Once a week"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:gravity="start|center_vertical"
+                android:paddingStart="14dp"
+                app:backgroundTint="@color/avanza_light_grey"
+                app:cornerRadius="12dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintTop_toBottomOf="@id/weekDaysCard"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+            <!-- Add Habit button-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddHabit"
+                android:layout_width="170dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="44dp"
+                android:layout_marginEnd="44dp"
+                android:layout_marginTop="56dp"
+
+                android:text="@string/add_habit"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+
+                app:backgroundTint="@color/avanza_blue"
+                app:cornerRadius="16dp"
+                app:strokeWidth="0dp"
+                app:layout_constraintTop_toBottomOf="@id/weeklyCard"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
