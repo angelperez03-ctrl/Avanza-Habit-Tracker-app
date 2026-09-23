@@ -112,51 +112,87 @@ Settings and account settings are added. The settings screen displays the user�
 Finally, the habit creation and habit editing features enables a user to add and edit habits. Habit deletion is also displayed within the edit habit feature. The new habit feature prompts the user to enter habit name, a description of the habit, and habit frequency. The habit editing feature allows the user to change habit details such as name, description, and frequency. For adding a new habit, the user simply selects add habit. To update a habit’s information, the user can select save or cancel if they do not want to change the habit’s information. If a user decides to delete a habit, they can select the delete button which will display a warning message. The warning message will alert the user if they want to delete the habit. The users select the delete button to remove a habit.
 
 
-Project (M5) Updates:
+**Project (M5) Updates:**
 
 Several changes have been added to the Avanza Habit Tracker application in the past few weeks. During weeks 2-3, changes include the creation of the initial Avanza Habit Tracker design, wireframes, screen layouts, navigation, and basic application structure. During week 4, the SQLite database functionality was implemented. Other changes include overall user authentication, user account creation, login, password hashing/verification, password reset/change functionality, and habit editing features. Improvements to the dashboard, settings, and statics screens have also been implemented to further enhance the application. The project has been pushed to GitHub. Current changes for this week include habit creation, storing habits within the database, and connecting habit information to dashboard and statistics screens. Future changes include implementing habit completion/progress tracking, settings/account settings, notification/reminder time functionality, testing and fixing bugs. The final tested version will be reflected in GitHub and in the README file. Any changes or modifications to the application will also be explained in the README file in future updates.
 
-Version Changelog 1.1
+**Version Changelog 1.1**
 
-Previous Updates (Weeks 2-4): 
+**Previous Updates (Weeks 2-4):**
+
 •	Created the initial Avanza Habit Tracker application design
+
 •	Developed application wireframes for Avanza
+
 •	Created screen layouts
+
 •	Implemented navigation between application displays
+
 •	Established basic Android application structure
+
 •	Created dashboard, settings, statics, and account screens such as login, account creation, change password
+
 •	Implemented SQLite database functionality
+
 •	Added user authentication
+
 •	Added user account creation
+
 •	Implemented user login functionality
+
 •	Added password hashing and password verification
+
 •	Added password reset and change-password functionality
+
 •	Added habit editing functionality
+
 •	Improved dashboard screen
+
 •	Improved settings and account settings screens
+
 •	Improved the statistics screen
+
 •	Push Avanza Habit Tracker project to GitHub
 
-Current Updates (Week 5):
+**Current Updates (Week 5):**
+
 •	Implement habit creation functionality
+
 •	Store newly created habits in the SQLite database
+
 •	Connect stored habit information to the Avanza dashboard
+
 •	Connect habit data to the Statistics screen
 
-Future Updates (Weeks 6-8):
+
+**Future Updates (Weeks 6-8):**
+
 •	Implement habit completion and progress tracking.
+
 •	Continue improvements to Settings and Account Settings functionality.
+
 •	Implement notification and reminder-time functionality.
+
 •	Continue updating and pushing application changes to GitHub.
+
 •	Test all major application features.
+
 •	Identify and fix application bugs.
+
 •	Verify that database functionality operates correctly.
+
 •	Verify habit creation, editing, completion, and progress tracking.
+
 •	Test user account and authentication functionality.
+
 •	Test notification and reminder functionality.
+
 •	Complete final application improvements.
+
 •	Update the GitHub repository with the final tested version.
+
 •	Update the README file to reflect the final application features and changes.
+
 •	Document any additional modifications made to the application before final submission.
 
 
