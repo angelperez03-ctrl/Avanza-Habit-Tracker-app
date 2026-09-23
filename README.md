@@ -131,7 +131,7 @@ Several changes have been added to the Avanza Habit Tracker application in the p
 
 •	Established basic Android application structure
 
-•	Created dashboard, settings, statics, and account screens such as login, account creation, change password
+•	Created dashboard, settings, statistics, and account screens such as login, account creation, change password
 
 •	Implemented SQLite database functionality
 
