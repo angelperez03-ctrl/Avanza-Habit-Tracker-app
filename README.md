@@ -1,9 +1,9 @@
-# Avanza-Habit-Tracker-app outline
+# Avanza-Habit-Tracker-app Updated outline
 
 
 
 
-COM 437 – Project Outline
+COM 437 – Project Outline (M5) Update
 
 Angel Perez
 
@@ -13,7 +13,7 @@ COM 437: Mobile Application Development
 
 Professor Marwan Omar
 
-August 31, 2026
+September 22, 2026
 
 
 
