@@ -118,6 +118,7 @@ Several changes have been added to the Avanza Habit Tracker application in the p
 
 **Version Changelog 1.1**
 
+
 **Previous Updates (Weeks 2-4):**
 
 •	Created the initial Avanza Habit Tracker application design
@@ -154,6 +155,7 @@ Several changes have been added to the Avanza Habit Tracker application in the p
 
 •	Push Avanza Habit Tracker project to GitHub
 
+
 **Current Updates (Week 5):**
 
 •	Implement habit creation functionality
@@ -163,6 +165,7 @@ Several changes have been added to the Avanza Habit Tracker application in the p
 •	Connect stored habit information to the Avanza dashboard
 
 •	Connect habit data to the Statistics screen
+
 
 
 **Future Updates (Weeks 6-8):**
