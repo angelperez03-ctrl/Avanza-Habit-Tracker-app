@@ -422,6 +422,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return habit;
     }
+
+    public int getCompletedHabitCountForDate(int userId, String date) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query =
+                "SELECT COUNT(*) FROM " + TABLE_HABIT_COMPLETIONS +
+                " INNER JOIN " + TABLE_HABITS +
+                " ON " + TABLE_HABIT_COMPLETIONS + "." +
+                COLUMN_HABIT_COMPLETION_HABIT_ID +
+                " = " + TABLE_HABITS + "." + COLUMN_HABIT_ID +
+                " WHERE " + TABLE_HABITS + "." +
+                COLUMN_HABIT_USER_ID + " = ?" +
+                " AND " + TABLE_HABIT_COMPLETIONS + "." +
+                COLUMN_HABIT_COMPLETION_DATE + " = ?" +
+                " AND " + TABLE_HABIT_COMPLETIONS + "." +
+                COLUMN_HABIT_COMPLETED + " = 1";
+
+        Cursor cursor = db.rawQuery(
+                query,
+                new String[]{
+                        String.valueOf(userId),
+                        date
+                }
+        );
+
+        int completedCount = 0;
+
+        if (cursor.moveToFirst()) {
+            completedCount = cursor.getInt(0);
+        }
+
+        cursor.close();
+
+        return completedCount;
+    }
+
+    public boolean isHabitCompletedForDate(int habitId, String date) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                TABLE_HABIT_COMPLETIONS,
+                new String[]{COLUMN_HABIT_COMPLETION_ID},
+                COLUMN_HABIT_COMPLETION_HABIT_ID + " = ? AND " +
+                        COLUMN_HABIT_COMPLETION_DATE + " = ? AND " +
+                        COLUMN_HABIT_COMPLETED + " = 1",
+                new String[]{
+                        String.valueOf(habitId),
+                        date
+                },
+                null,
+                null,
+                null
+        );
+        boolean completed = cursor.moveToFirst();
+
+        cursor.close();
+        
+        return completed;
+    }
 }
 
 

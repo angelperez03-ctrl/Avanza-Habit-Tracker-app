@@ -80,7 +80,7 @@
                             android:layout_height="64dp"
                             android:indeterminate="false"
                             android:max="100"
-                            android:progress="50"
+                            android:progress="0"
                             app:indicatorColor="#51CFF1"
                             app:indicatorSize="56dp"
                             app:trackColor="#DDDDDD"

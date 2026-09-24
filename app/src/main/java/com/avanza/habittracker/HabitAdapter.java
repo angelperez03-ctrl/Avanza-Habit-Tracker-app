@@ -1,11 +1,18 @@
 package com.avanza.habittracker;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.content.Intent;
+
+import com.avanza.habittracker.database.DatabaseHelper;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,10 +23,23 @@ import java.util.ArrayList;
 
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder> {
 
+    private Context context;
     private final ArrayList<Habit> habits;
 
-    public HabitAdapter(ArrayList<Habit> habits) {
-        this.habits = habits;
+    private OnHabitCompletedListener completionListener;
+
+    public interface OnHabitCompletedListener {
+        void onHabitCompleted();
+    }
+
+    public HabitAdapter(
+            Context context,
+            ArrayList<Habit> habitList,
+            OnHabitCompletedListener completionListener) {
+
+        this.context = context;
+        this.habits = habitList;
+        this.completionListener = completionListener;
     }
 
     @NonNull
@@ -51,6 +71,62 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         holder.txtFrequency.setText(
                 habit.getFrequency()
         );
+
+        String today = new SimpleDateFormat(
+                "yyyy-MM-dd",
+                Locale.getDefault()
+        ).format(new Date());
+
+        DatabaseHelper databaseHelper =
+                new DatabaseHelper(holder.itemView.getContext());
+
+        boolean completed =
+                databaseHelper.isHabitCompletedForDate(
+                        habit.getId(),
+                        today
+                );
+        if (completed) {
+
+            holder.btnHabitComplete.setBackgroundResource(
+                    R.drawable.circle_complete
+            );
+
+        } else {
+
+            holder.btnHabitComplete.setBackgroundResource(
+                    R.drawable.circle_incomplete
+            );
+        }
+
+        holder.btnHabitComplete.setOnClickListener(v -> {
+
+            boolean alreadyCompleted =
+                    databaseHelper.isHabitCompletedForDate(
+                            habit.getId(),
+                            today
+                    );
+
+            if (!alreadyCompleted) {
+
+                long result =
+                        databaseHelper.addHabitCompletion(
+                                habit.getId(),
+                                today,
+                                1
+                        );
+
+                if (result != -1) {
+
+                    holder.btnHabitComplete.setBackgroundResource(
+                            R.drawable.circle_complete
+                    );
+
+                    if (completionListener != null) {
+                        completionListener.onHabitCompleted();
+                    }
+                }
+            }
+        });
 
         // Edit habit pencil button
         holder.btnEditHabit.setOnClickListener(v -> {
