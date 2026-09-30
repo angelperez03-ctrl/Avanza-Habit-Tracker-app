@@ -21,6 +21,9 @@ import com.avanza.habittracker.models.Habit;
 
 import java.util.ArrayList;
 
+import java.util.Calendar;
+import java.util.Set;
+
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder> {
 
     private Context context;
@@ -29,7 +32,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
     private OnHabitCompletedListener completionListener;
 
     public interface OnHabitCompletedListener {
-        void onHabitCompleted();
+        void onHabitCompletionChanged();
     }
 
     public HabitAdapter(
@@ -80,6 +83,13 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         DatabaseHelper databaseHelper =
                 new DatabaseHelper(holder.itemView.getContext());
 
+        // Update week bars
+        updateWeekBars(
+                holder,
+                habit,
+                databaseHelper
+        );
+
         boolean completed =
                 databaseHelper.isHabitCompletedForDate(
                         habit.getId(),
@@ -106,7 +116,40 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                             today
                     );
 
-            if (!alreadyCompleted) {
+            if (alreadyCompleted) {
+
+                // ----------------------------
+                // UNDO COMPLETION
+                // ----------------------------
+
+                int result =
+                        databaseHelper.deleteHabitCompletion(
+                                habit.getId(),
+                                today
+                        );
+
+                if (result > 0) {
+
+                    holder.btnHabitComplete.setBackgroundResource(
+                            R.drawable.circle_incomplete
+                    );
+
+                    updateWeekBars(
+                            holder,
+                            habit,
+                            databaseHelper
+                    );
+
+                    if (completionListener != null) {
+                        completionListener.onHabitCompletionChanged();
+                    }
+                }
+
+            } else {
+
+                // ----------------------------
+                // COMPLETE HABIT
+                // ----------------------------
 
                 long result =
                         databaseHelper.addHabitCompletion(
@@ -121,8 +164,14 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                             R.drawable.circle_complete
                     );
 
+                    updateWeekBars(
+                            holder,
+                            habit,
+                            databaseHelper
+                    );
+
                     if (completionListener != null) {
-                        completionListener.onHabitCompleted();
+                        completionListener.onHabitCompletionChanged();
                     }
                 }
             }
@@ -142,6 +191,80 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         });
     }
 
+    private void updateWeekBars(
+            HabitViewHolder holder,
+            Habit habit,
+            DatabaseHelper databaseHelper) {
+
+        SimpleDateFormat dateFormat =
+                new SimpleDateFormat(
+                        "yyyy-MM-dd",
+                        Locale.getDefault()
+                );
+
+        Calendar monday = Calendar.getInstance();
+
+        int currentDay =
+                monday.get(Calendar.DAY_OF_WEEK);
+
+        int daysFromMonday =
+                (currentDay + 5) % 7;
+
+        monday.add(
+                Calendar.DAY_OF_MONTH,
+                -daysFromMonday
+        );
+
+        String[] weekDates = new String[7];
+
+        Calendar day =
+                (Calendar) monday.clone();
+
+        for (int i = 0; i < 7; i++) {
+
+            weekDates[i] =
+                    dateFormat.format(day.getTime());
+
+            day.add(
+                    Calendar.DAY_OF_MONTH,
+                    1
+            );
+        }
+
+        Set<String> completedDates =
+                databaseHelper.getHabitCompletionDatesForRange(
+                        habit.getId(),
+                        weekDates[0],
+                        weekDates[6]
+                );
+
+        View[] dayProgressViews = {
+                holder.barMonday,
+                holder.barTuesday,
+                holder.barWednesday,
+                holder.barThursday,
+                holder.barFriday,
+                holder.barSaturday,
+                holder.barSunday
+        };
+
+        for (int i = 0; i < 7; i++) {
+
+            if (completedDates.contains(weekDates[i])) {
+
+                dayProgressViews[i].setBackgroundResource(
+                        R.drawable.day_bar_complete
+                );
+
+            } else {
+
+                dayProgressViews[i].setBackgroundResource(
+                        R.drawable.day_bar_incomplete
+                );
+            }
+        }
+    }
+
     @Override
     public int getItemCount() {
         return habits.size();
@@ -157,6 +280,14 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
         ImageButton btnEditHabit;
         View btnHabitComplete;
+
+        View barMonday;
+        View barTuesday;
+        View barWednesday;
+        View barThursday;
+        View barFriday;
+        View barSaturday;
+        View barSunday;
 
         public HabitViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -178,6 +309,27 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
             btnHabitComplete =
                     itemView.findViewById(R.id.btnHabitComplete);
+
+            barMonday =
+                    itemView.findViewById(R.id.barMonday);
+
+            barTuesday =
+                    itemView.findViewById(R.id.barTuesday);
+
+            barWednesday =
+                    itemView.findViewById(R.id.barWednesday);
+
+            barThursday =
+                    itemView.findViewById(R.id.barThursday);
+
+            barFriday =
+                    itemView.findViewById(R.id.barFriday);
+
+            barSaturday =
+                    itemView.findViewById(R.id.barSaturday);
+
+            barSunday =
+                    itemView.findViewById(R.id.barSunday);
         }
     }
 }

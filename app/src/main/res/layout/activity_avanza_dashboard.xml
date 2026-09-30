@@ -7,6 +7,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:background="@drawable/dashboard_background">
 
     <androidx.core.widget.NestedScrollView
@@ -168,6 +170,8 @@
                 android:id="@+id/habitRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="90dp"
+                android:clipToPadding="false"
                 android:layout_marginTop="12dp"
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/habit_item"

@@ -31,13 +31,20 @@ public class AvanzaDashboardActivity extends AppCompatActivity {
     private TextView txtHabitsCompleted;
     private TextView txtHabitsRemaining;
 
+    private DatabaseHelper databaseHelper;
+    private ArrayList<Habit> habitList;
+    private HabitAdapter habitAdapter;
+
+    private int userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_avanza_dashboard);
+        findViewById(R.id.main).requestFocus();
 
-        int userId = getSharedPreferences(
+        userId = getSharedPreferences(
                 "AvanzaPrefs",
                 MODE_PRIVATE
         ).getInt("loggedInUserId", -1);
@@ -59,7 +66,7 @@ public class AvanzaDashboardActivity extends AppCompatActivity {
                 new LinearLayoutManager(this)
         );
 
-        DatabaseHelper databaseHelper =
+        databaseHelper =
                 new DatabaseHelper(this);
 
         weeklyProgressCircle =
@@ -84,7 +91,7 @@ public class AvanzaDashboardActivity extends AppCompatActivity {
             );
         }
 
-        ArrayList<Habit> habitList = new ArrayList<>(
+        habitList = new ArrayList<>(
                 databaseHelper.getAllHabitsByUser(userId)
         );
 
@@ -94,7 +101,7 @@ public class AvanzaDashboardActivity extends AppCompatActivity {
                 habitList
         );
 
-        HabitAdapter habitAdapter =
+        habitAdapter =
                 new HabitAdapter(AvanzaDashboardActivity.this,
                         habitList,
                         () -> updateDashboardProgress(
@@ -208,6 +215,33 @@ public class AvanzaDashboardActivity extends AppCompatActivity {
                 remainingHabits +
                         " remaining"
         );
+    }
+    private void loadHabits() {
+
+        if (habitList == null || habitAdapter == null) {
+            return;
+        }
+
+        habitList.clear();
+
+        habitList.addAll(
+                databaseHelper.getAllHabitsByUser(userId)
+        );
+
+        habitAdapter.notifyDataSetChanged();
+
+        updateDashboardProgress(
+                databaseHelper,
+                userId,
+                habitList
+        );
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        loadHabits();
     }
 
 }

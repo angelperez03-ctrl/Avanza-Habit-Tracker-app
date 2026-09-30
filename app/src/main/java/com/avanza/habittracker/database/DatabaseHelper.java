@@ -10,7 +10,9 @@ import com.avanza.habittracker.models.Habit;
 import com.avanza.habittracker.models.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -46,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db){
+    public void onCreate(SQLiteDatabase db) {
 
         String createUsersTable =
                 "CREATE TABLE " + TABLE_USERS + " (" +
@@ -85,7 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HABIT_COMPLETIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HABITS);
@@ -138,7 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             );
 
             String email = cursor.getString(
-                    cursor.getColumnIndexOrThrow(COLUMN_USER_NAME)
+                    cursor.getColumnIndexOrThrow(COLUMN_USER_EMAIL)
             );
 
             String passwordHash = cursor.getString(
@@ -188,7 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowsAffected;
     }
 
-    public User getUserByEmail(String email){
+    public User getUserByEmail(String email) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -239,6 +241,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return user;
     }
+    public int updateUserProfile(
+            int userId,
+            String newName,
+            String newEmail) {
+
+        SQLiteDatabase db =
+                this.getWritableDatabase();
+
+        ContentValues values =
+                new ContentValues();
+
+        values.put(
+                COLUMN_USER_NAME,
+                newName
+        );
+
+        values.put(
+                COLUMN_USER_EMAIL,
+                newEmail
+        );
+
+        int rowsAffected =
+                db.update(
+                        TABLE_USERS,
+                        values,
+                        COLUMN_USER_ID + " = ?",
+                        new String[]{
+                                String.valueOf(userId)
+                        }
+                );
+
+        db.close();
+
+        return rowsAffected;
+    }
 
     public long addHabit(int userId, String name, String description, String frequency) {
 
@@ -259,7 +296,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public List<Habit> getAllHabitsByUser(int userId){
+    public List<Habit> getAllHabitsByUser(int userId) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -317,7 +354,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return habits;
     }
 
-    public int updateHabit(int habitId, String newName, String newDescription, String newFrequency, int newStreak ) {
+    public int updateHabit(int habitId, String newName, String newDescription, String newFrequency, int newStreak) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -338,21 +375,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return rowsAffected;
-    }
-
-    public int deleteHabit(int habitId) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        int rowsDeleted = db.delete(
-                TABLE_HABITS,
-                COLUMN_HABIT_ID + " = ?",
-                new String[]{String.valueOf(habitId)}
-        );
-
-        db.close();
-
-        return rowsDeleted;
     }
 
     public long addHabitCompletion(int habitId, String date, int completed) {
@@ -428,16 +450,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String query =
                 "SELECT COUNT(*) FROM " + TABLE_HABIT_COMPLETIONS +
-                " INNER JOIN " + TABLE_HABITS +
-                " ON " + TABLE_HABIT_COMPLETIONS + "." +
-                COLUMN_HABIT_COMPLETION_HABIT_ID +
-                " = " + TABLE_HABITS + "." + COLUMN_HABIT_ID +
-                " WHERE " + TABLE_HABITS + "." +
-                COLUMN_HABIT_USER_ID + " = ?" +
-                " AND " + TABLE_HABIT_COMPLETIONS + "." +
-                COLUMN_HABIT_COMPLETION_DATE + " = ?" +
-                " AND " + TABLE_HABIT_COMPLETIONS + "." +
-                COLUMN_HABIT_COMPLETED + " = 1";
+                        " INNER JOIN " + TABLE_HABITS +
+                        " ON " + TABLE_HABIT_COMPLETIONS + "." +
+                        COLUMN_HABIT_COMPLETION_HABIT_ID +
+                        " = " + TABLE_HABITS + "." + COLUMN_HABIT_ID +
+                        " WHERE " + TABLE_HABITS + "." +
+                        COLUMN_HABIT_USER_ID + " = ?" +
+                        " AND " + TABLE_HABIT_COMPLETIONS + "." +
+                        COLUMN_HABIT_COMPLETION_DATE + " = ?" +
+                        " AND " + TABLE_HABIT_COMPLETIONS + "." +
+                        COLUMN_HABIT_COMPLETED + " = 1";
 
         Cursor cursor = db.rawQuery(
                 query,
@@ -478,8 +500,116 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean completed = cursor.moveToFirst();
 
         cursor.close();
-        
+
         return completed;
+    }
+
+    public Set<String> getHabitCompletionDatesForRange(
+            int habitId,
+            String startDate,
+            String endDate) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Set<String> completionDates = new HashSet<>();
+
+        Cursor cursor = db.query(
+                TABLE_HABIT_COMPLETIONS,
+                new String[]{COLUMN_HABIT_COMPLETION_DATE},
+                COLUMN_HABIT_COMPLETION_HABIT_ID + " = ? AND " +
+                        COLUMN_HABIT_COMPLETION_DATE + " BETWEEN ? AND ? AND " +
+                        COLUMN_HABIT_COMPLETED + " = 1",
+                new String[]{
+                        String.valueOf(habitId),
+                        startDate,
+                        endDate
+                },
+                null,
+                null,
+                null
+        );
+
+        while (cursor.moveToNext()) {
+
+            String date = cursor.getString(
+                    cursor.getColumnIndexOrThrow(
+                            COLUMN_HABIT_COMPLETION_DATE
+                    )
+            );
+
+            completionDates.add(date);
+        }
+        cursor.close();
+
+        return completionDates;
+        }
+
+    public int deleteHabitCompletion(int habitId, String date) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int rowsDeleted = db.delete(
+                TABLE_HABIT_COMPLETIONS,
+                COLUMN_HABIT_COMPLETION_HABIT_ID + " = ? AND " +
+                        COLUMN_HABIT_COMPLETION_DATE + " = ?",
+                new String[]{
+                        String.valueOf(habitId),
+                        date
+                }
+        );
+
+        db.close();
+
+        return rowsDeleted;
+    }
+
+    public int deleteHabit(int habitId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Remove all completion records for this habit first
+        db.delete(
+                TABLE_HABIT_COMPLETIONS,
+                COLUMN_HABIT_COMPLETION_HABIT_ID + " = ?",
+                new String[]{String.valueOf(habitId)}
+        );
+
+        // Remove the habit itself
+        int rowsDeleted = db.delete(
+                TABLE_HABITS,
+                COLUMN_HABIT_ID + " = ?",
+                new String[]{String.valueOf(habitId)}
+        );
+
+        db.close();
+
+        return rowsDeleted;
+    }
+
+    public ArrayList<String> getAllCompletionDatesForHabit(int habitId) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ArrayList<String> dates = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT DISTINCT " + COLUMN_HABIT_COMPLETION_DATE + " FROM " + TABLE_HABIT_COMPLETIONS +
+                        " WHERE " + COLUMN_HABIT_COMPLETION_HABIT_ID + " = ?" +
+                        " AND " + COLUMN_HABIT_COMPLETED + " = 1" +
+                        " ORDER BY " + COLUMN_HABIT_COMPLETION_DATE + " ASC",
+                new String[]{String.valueOf(habitId)}
+        );
+
+        while (cursor.moveToNext()) {
+
+            String date = cursor.getString(0);
+
+            dates.add(date);
+        }
+
+        cursor.close();
+
+        return dates;
     }
 }
 

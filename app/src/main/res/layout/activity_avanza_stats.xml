@@ -94,8 +94,8 @@
                         android:id="@+id/bestStreakLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/days_in_a_row"
-                        android:textSize="15sp"
+                        android:text="completions in a row"
+                        android:textSize="12sp"
                         android:textColor="#666666"/>
 
                 </LinearLayout>
