@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Calendar;
 
 
 public class AvanzaDashboardActivity extends AppCompatActivity {
@@ -85,11 +86,31 @@ public class AvanzaDashboardActivity extends AppCompatActivity {
 
         TextView greetingText = findViewById(R.id.txtGreeting);
 
-        if (user!= null) {
-            greetingText.setText(
-                    getString(R.string.good_morning_user, user.getName())
-            );
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        String greeting;
+
+        if (hour >= 5 && hour < 12) {
+
+            greeting = "Good morning";
+
+        } else if (hour >= 12 && hour < 17) {
+
+            greeting = "Good afternoon";
+
+        } else if (hour >= 17 && hour < 24) {
+
+            greeting = "Good evening";
+
+        } else {
+
+            greeting = "Good night";
         }
+
+        greetingText.setText(
+                greeting + ",\n" + user.getName() + "."
+        );
 
         habitList = new ArrayList<>(
                 databaseHelper.getAllHabitsByUser(userId)

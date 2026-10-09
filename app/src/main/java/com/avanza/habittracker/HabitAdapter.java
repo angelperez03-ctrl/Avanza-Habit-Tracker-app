@@ -12,6 +12,7 @@ import com.avanza.habittracker.database.DatabaseHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -67,8 +68,13 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         holder.txtHabitName.setText(habit.getName());
         holder.txtHabitDescription.setText(habit.getDescription());
 
-        holder.txtHabitStreak.setText(
-                "Streak: " + habit.getStreak() + "d"
+        DatabaseHelper databaseHelper =
+                new DatabaseHelper(holder.itemView.getContext());
+
+        updateStreakText(
+                holder,
+                habit,
+                databaseHelper
         );
 
         holder.txtFrequency.setText(
@@ -80,8 +86,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 Locale.getDefault()
         ).format(new Date());
 
-        DatabaseHelper databaseHelper =
-                new DatabaseHelper(holder.itemView.getContext());
 
         // Update week bars
         updateWeekBars(
@@ -128,6 +132,12 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                                 today
                         );
 
+                updateStreakText(
+                        holder,
+                        habit,
+                        databaseHelper
+                );
+
                 if (result > 0) {
 
                     holder.btnHabitComplete.setBackgroundResource(
@@ -165,6 +175,12 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                     );
 
                     updateWeekBars(
+                            holder,
+                            habit,
+                            databaseHelper
+                    );
+
+                    updateStreakText(
                             holder,
                             habit,
                             databaseHelper
@@ -263,6 +279,284 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 );
             }
         }
+    }
+
+    private void updateStreakText(
+            HabitViewHolder holder,
+            Habit habit,
+            DatabaseHelper databaseHelper) {
+
+        int streak =
+                calculateCurrentStreak(
+                        habit,
+                        databaseHelper
+                );
+
+        holder.txtHabitStreak.setText(
+                "Streak: " + streak + "d"
+        );
+    }
+
+    private int calculateCurrentStreak(
+            Habit habit,
+            DatabaseHelper databaseHelper) {
+
+        ArrayList<String> completionDates =
+                databaseHelper.getAllCompletionDatesForHabit(
+                        habit.getId()
+                );
+
+        if (completionDates.isEmpty()) {
+            return 0;
+        }
+
+        Set<String> completedDates =
+                new HashSet<>(completionDates);
+
+        SimpleDateFormat dateFormat =
+                new SimpleDateFormat(
+                        "yyyy-MM-dd",
+                        Locale.getDefault()
+                );
+
+        if (habit.getFrequency().equals("Weekly")) {
+
+            return calculateWeeklyStreak(
+                    completedDates,
+                    dateFormat
+            );
+        }
+
+        Calendar today =
+                Calendar.getInstance();
+
+        Calendar currentDate =
+                getMostRecentScheduledDate(
+                        today,
+                        habit.getFrequency()
+                );
+
+        String currentDateString =
+                dateFormat.format(
+                        currentDate.getTime()
+                );
+
+        // If today is a scheduled day but the user
+        // has not completed it yet, do not break
+        // yesterday's streak yet.
+        boolean currentDateIsToday =
+                dateFormat.format(today.getTime())
+                        .equals(currentDateString);
+
+        if (currentDateIsToday
+                && !completedDates.contains(currentDateString)) {
+
+            currentDate =
+                    getPreviousScheduledDate(
+                            currentDate,
+                            habit.getFrequency()
+                    );
+        }
+
+        int streak = 0;
+
+        while (completedDates.contains(
+                dateFormat.format(currentDate.getTime()))) {
+
+            streak++;
+
+            currentDate =
+                    getPreviousScheduledDate(
+                            currentDate,
+                            habit.getFrequency()
+                    );
+        }
+
+        return streak;
+    }
+
+    private Calendar getMostRecentScheduledDate(
+            Calendar date,
+            String frequency) {
+
+        Calendar scheduledDate =
+                (Calendar) date.clone();
+
+        if (frequency.equals("Weekdays")) {
+
+            while (scheduledDate.get(Calendar.DAY_OF_WEEK)
+                    == Calendar.SATURDAY
+                    ||
+                    scheduledDate.get(Calendar.DAY_OF_WEEK)
+                            == Calendar.SUNDAY) {
+
+                scheduledDate.add(
+                        Calendar.DAY_OF_MONTH,
+                        -1
+                );
+            }
+
+        } else if (frequency.equals("Weekends")) {
+
+            while (scheduledDate.get(Calendar.DAY_OF_WEEK)
+                    != Calendar.SATURDAY
+                    &&
+                    scheduledDate.get(Calendar.DAY_OF_WEEK)
+                            != Calendar.SUNDAY) {
+
+                scheduledDate.add(
+                        Calendar.DAY_OF_MONTH,
+                        -1
+                );
+            }
+        }
+
+        return scheduledDate;
+    }
+
+    private Calendar getPreviousScheduledDate(
+            Calendar date,
+            String frequency) {
+
+        Calendar previous =
+                (Calendar) date.clone();
+
+        switch (frequency) {
+
+            case "Daily":
+
+                previous.add(
+                        Calendar.DAY_OF_MONTH,
+                        -1
+                );
+
+                break;
+
+            case "Weekdays":
+
+                do {
+
+                    previous.add(
+                            Calendar.DAY_OF_MONTH,
+                            -1
+                    );
+
+                } while (
+                        previous.get(Calendar.DAY_OF_WEEK)
+                                == Calendar.SATURDAY
+                                ||
+                                previous.get(Calendar.DAY_OF_WEEK)
+                                        == Calendar.SUNDAY
+                );
+
+                break;
+
+            case "Weekends":
+
+                do {
+
+                    previous.add(
+                            Calendar.DAY_OF_MONTH,
+                            -1
+                    );
+
+                } while (
+                        previous.get(Calendar.DAY_OF_WEEK)
+                                != Calendar.SATURDAY
+                                &&
+                                previous.get(Calendar.DAY_OF_WEEK)
+                                        != Calendar.SUNDAY
+                );
+
+                break;
+        }
+
+        return previous;
+    }
+
+    private int calculateWeeklyStreak(
+            Set<String> completedDates,
+            SimpleDateFormat dateFormat) {
+
+        Set<String> completedWeeks =
+                new HashSet<>();
+
+        for (String completionDate : completedDates) {
+
+            try {
+
+                Calendar date =
+                        Calendar.getInstance();
+
+                date.setTime(
+                        dateFormat.parse(completionDate)
+                );
+
+                int currentDay =
+                        date.get(Calendar.DAY_OF_WEEK);
+
+                int daysFromMonday =
+                        (currentDay + 5) % 7;
+
+                date.add(
+                        Calendar.DAY_OF_MONTH,
+                        -daysFromMonday
+                );
+
+                completedWeeks.add(
+                        dateFormat.format(
+                                date.getTime()
+                        )
+                );
+
+            } catch (Exception ignored) {
+            }
+        }
+
+        Calendar week =
+                Calendar.getInstance();
+
+        int currentDay =
+                week.get(Calendar.DAY_OF_WEEK);
+
+        int daysFromMonday =
+                (currentDay + 5) % 7;
+
+        week.add(
+                Calendar.DAY_OF_MONTH,
+                -daysFromMonday
+        );
+
+        String currentWeek =
+                dateFormat.format(
+                        week.getTime()
+                );
+
+        // Current week isn't over yet, so don't
+        // break the previous streak just because
+        // it hasn't been completed yet.
+        if (!completedWeeks.contains(currentWeek)) {
+
+            week.add(
+                    Calendar.DAY_OF_MONTH,
+                    -7
+            );
+        }
+
+        int streak = 0;
+
+        while (completedWeeks.contains(
+                dateFormat.format(week.getTime()))) {
+
+            streak++;
+
+            week.add(
+                    Calendar.DAY_OF_MONTH,
+                    -7
+            );
+        }
+
+        return streak;
     }
 
     @Override
