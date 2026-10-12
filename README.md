@@ -211,12 +211,11 @@ Notifications are also tested by setting a reminder time and waiting for Android
 
 **Avanza Habit Tracker - Version Changelog
 
-Version 1.3 - Final Update
+**Version 1.3 - Final Update**
 
-Weeks 7-8
+**Weeks 7-8**
 
-Version 1.2 – Previous Updates
-Previous Week**
+**Version 1.2 – Previous Updates**
 
 •	Completed habit completion and progress tracking.
 
