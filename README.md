@@ -198,6 +198,90 @@ Several changes have been added to the Avanza Habit Tracker application in the p
 
 •	Document any additional modifications made to the application before final submission.
 
+**Project (M8) Updates:**
+
+
+
+**Version Changelog 1.3**
+
+Avanza Habit Tracker - Version Changelog
+
+Version 1.3 - Final Update
+
+Weeks 7-8
+
+Version 1.2 – Previous Updates
+Previous Week
+
+•	Completed habit completion and progress tracking.
+
+•	Completed dashboard progress functionality.
+
+•	Implemented weekly habit completion tracking.
+
+
+Completed Statistics screen functionality, including:
+
+•	Weekly completion rate
+
+•	Best streak
+
+•	Total habits being tracked
+
+•	Weekly check-ins
+
+•	Weekly completion progress
+
+
+Completed Settings and Account Settings functionality.
+
+•	Implemented notification on/off functionality.
+
+•	Implemented reminder-time selection and saving.
+
+•	Implemented scheduled habit reminder notifications.
+
+•	Implemented user profile display and account profile updates.
+
+•	Added username and email editing functionality.
+
+•	Continued updating and pushing application changes to GitHub.
+
+
+**Version 1.3 – Current Updates
+Remaining Project Weeks (7-8)**
+
+•	Tested all major application features.
+
+•	Identified and fixed application bugs.
+
+•	Verified SQLite database functionality.
+
+•	Verified habit creation, editing, deletion, completion, and progress tracking.
+
+•	Tested dashboard and statistics calculations.
+
+•	Tested user account and authentication functionality.
+
+•	Tested account profile updates.
+
+•	Tested notification and reminder functionality.
+
+•	Verified application navigation and user interface behavior.
+
+•	Completed final application improvements.
+
+•	Updated the GitHub repository with the final tested version.
+
+•	Updated the README file to reflect the final application features and changes.
+
+•	Documented any additional modifications made before final submission.
+
+
+**Final Version:**
+
+The changelog reflects the final version of the project. All changes have been committed and have been included within the final changelog.
+
 
 **References:**
 
