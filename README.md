@@ -200,6 +200,11 @@ Several changes have been added to the Avanza Habit Tracker application in the p
 
 **Project (M8) Updates:**
 
+The final changes of Avanza have been integrated and committed to the project repository. Weeks 6-8 changes include finalizing the Avanza dashboard, statistics, and settings screens, implement notification functionality, reminders, username and email editing functionality, testing all major application features, verifying that all application features work as intended, and completed final application improvements. The GitHub repository is updated with the final test version. The README file has also been updated with the latest changes and features of the application. All additional modifications have been documented before final project submission.
+
+The latest version changelog shows previous updates from the previous changelog to the current changelog. The previous changelog explains how development of major features of the Avanza application are completed. The current changes are testing the application and ensuring that all features are working properly without any issues. The SQL database was also tested by creating, editing, and deleting habits to ensure that the database is updating correctly and reflecting corresponding changes to the dashboard. Also, habit streaks and progress information is being reflected accurately within the dashboard and statistics page. 
+
+Notifications are also tested by setting a reminder time and waiting for Android to trigger the notification. Habit reminders are working properly, which shows that this application can effectively remind users to complete their habits. User authentication was also tested to ensure that users can properly create an account, change their password, and log in. The account settings feature was also tested to ensure that users can change their personal information details such as name and email. The new email was tested to verify that the database is updating user credentials. As a result, users can create and track habits with Avanza.
 
 
 **Version Changelog 1.3**
