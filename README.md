@@ -209,7 +209,7 @@ Notifications are also tested by setting a reminder time and waiting for Android
 
 **Version Changelog 1.3**
 
-**Avanza Habit Tracker - Version Changelog
+**Avanza Habit Tracker - Version Changelog**
 
 **Version 1.3 - Final Update**
 
