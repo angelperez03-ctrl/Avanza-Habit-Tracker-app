@@ -209,14 +209,14 @@ Notifications are also tested by setting a reminder time and waiting for Android
 
 **Version Changelog 1.3**
 
-Avanza Habit Tracker - Version Changelog
+**Avanza Habit Tracker - Version Changelog
 
 Version 1.3 - Final Update
 
 Weeks 7-8
 
 Version 1.2 – Previous Updates
-Previous Week
+Previous Week**
 
 •	Completed habit completion and progress tracking.
 
