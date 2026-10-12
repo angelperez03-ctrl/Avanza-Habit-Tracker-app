@@ -3,7 +3,7 @@
 
 
 
-COM 437 – Project Outline (M5) Update
+COM 437 – Project Outline Report (M8) Final Update
 
 Angel Perez
 
@@ -13,7 +13,7 @@ COM 437: Mobile Application Development
 
 Professor Marwan Omar
 
-September 22, 2026
+October 12, 2026
 
 
 
